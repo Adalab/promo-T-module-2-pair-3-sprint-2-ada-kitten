@@ -42,10 +42,13 @@ const GITHUB_USER = '<Lolagarcia5>';
 const SERVER_URL = `https://dev.adalab.es/api/kittens/${GITHUB_USER}`;
 
 fetch(SERVER_URL)
-.then((response) => response.json())
-.then((data)=>(kittenDataList = data.result));
-renderKittenList(kittenDataList);
+  .then((response) => response.json())
+  .then((data) => {
+    kittenDataList = data.results;
+    renderKittenList(kittenDataList);
+  });
 
+  const kittenListStored = JSON.parse(localStorage.getItem('kittensList'));
 
 //Funciones
 function renderKitten(kittenData) {
@@ -117,7 +120,6 @@ function addNewKitten(event) {
     inputRace.value = '';
     renderKittenList(kittenDataList);
   }
-  
 }
 //Cancelar la búsqueda de un gatito
 function cancelNewKitten(event) {
@@ -132,8 +134,8 @@ function cancelNewKitten(event) {
 function filterKitten(event) {
   event.preventDefault();
   const kittenListFiltered = kittenDataList
-  .filter((cat) => cat.desc.includes(input_search_desc.value))
-  .filter((cat) => cat.race.includes(input_search_race.value));
+    .filter((cat) => cat.desc.includes(input_search_desc.value))
+    .filter((cat) => cat.race.includes(input_search_race.value));
   listElement.innerHTML = '';
   renderKittenList(kittenListFiltered);
 }
