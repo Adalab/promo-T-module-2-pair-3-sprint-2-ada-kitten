@@ -47,20 +47,18 @@ kittenDataList = kittenListStored;
 
 if (kittenListStored) {
   renderKittenList(kittenDataList);
-
 } else {
   fetch(SERVER_URL)
-  .then((response) => response.json())
-  .then((data) => {
-    kittenDataList = data.results;
-    localStorage.setItem('kittensList', JSON.stringify(kittenDataList))
-    renderKittenList(kittenDataList);
-  })
+    .then((response) => response.json())
+    .then((data) => {
+      kittenDataList = data.results;
+      localStorage.setItem('kittensList', JSON.stringify(kittenDataList));
+      renderKittenList(kittenDataList);
+    })
     .catch((error) => {
       console.error(error);
     });
 }
-
 
 //Funciones
 function renderKitten(kittenData) {
@@ -124,15 +122,32 @@ function addNewKitten(event) {
     newKittenDataObject.image !== '' &&
     newKittenDataObject.name !== ''
   ) {
-    kittenDataList.push(newKittenDataObject);
-    labelMessageError.innerHTML = 'Mola! Un nuevo gatito en Adalab!';
+    fetch(`https://dev.adalab.es/api/kittens/${GITHUB_USER}`, {
+  method: 'POST',
+  headers: {'Content-Type': 'application/json'},
+  body: JSON.stringify(newKittenDataObject),
+})
+  .then((response) => response.json())
+  .then((data) => {
+    if (data.success) {
+      kittenDataList.push(newKittenDataObject);
+      localStorage.setItem('kittensList', JSON.stringify(kittenDataList));
+      renderKittenList(kittenDataList);
+      labelMessageError.innerHTML = 'Mola! Un nuevo gatito en Adalab!';
     inputDesc.value = '';
     inputPhoto.value = '';
     inputName.value = '';
     inputRace.value = '';
-    renderKittenList(kittenDataList);
+    } 
+    else {
+      .catch((error) => {
+        console.error(error)
+      });
+    }
+  })
   }
-}
+};
+
 //Cancelar la búsqueda de un gatito
 function cancelNewKitten(event) {
   event.preventDefault();
