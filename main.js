@@ -17,6 +17,7 @@ const input_search_desc = document.querySelector('.js_in_search_desc');
 const input_search_race = document.querySelector('.js_in_search_race');
 
 //Objetos con cada gatito
+/*
 const kittenData_1 = {
   image: 'https://dev.adalab.es/gato-siames.webp',
   name: 'Anastacio',
@@ -35,20 +36,31 @@ const kittenData_3 = {
   desc: ' Tienen la cabeza cuadrada y los ojos simétricos, por lo que su bella mirada se ha convertido en una de sus señas de identidad. Sus ojos son grandes y las orejas resultan largas y en punta.',
   race: 'Maine Coon',
 };
+*/
 
 let kittenDataList = [];
 
 const GITHUB_USER = '<Lolagarcia5>';
 const SERVER_URL = `https://dev.adalab.es/api/kittens/${GITHUB_USER}`;
+const kittenListStored = JSON.parse(localStorage.getItem('kittensList'));
+kittenDataList = kittenListStored;
 
-fetch(SERVER_URL)
+if (kittenListStored) {
+  renderKittenList(kittenDataList);
+
+} else {
+  fetch(SERVER_URL)
   .then((response) => response.json())
   .then((data) => {
     kittenDataList = data.results;
+    localStorage.setItem('kittensList', JSON.stringify(kittenDataList))
     renderKittenList(kittenDataList);
-  });
+  })
+    .catch((error) => {
+      console.error(error);
+    });
+}
 
-  const kittenListStored = JSON.parse(localStorage.getItem('kittensList'));
 
 //Funciones
 function renderKitten(kittenData) {
@@ -141,7 +153,7 @@ function filterKitten(event) {
 }
 
 //Mostrar el listado de gatitos en el HTML
-renderKittenList(kittenDataList);
+//renderKittenList(kittenDataList);
 
 //Eventos
 linkNewFormElememt.addEventListener('click', handleClickNewCatForm);
