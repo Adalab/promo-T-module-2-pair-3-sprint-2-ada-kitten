@@ -122,11 +122,11 @@ function addNewKitten(event) {
     newKittenDataObject.image !== '' &&
     newKittenDataObject.name !== ''
   ) {
-    fetch(`https://dev.adalab.es/api/kittens/${GITHUB_USER}`, {
+    fetch(`https://dev.adalab.es/api/kittens/${GITHUB_USER}`), {
   method: 'POST',
   headers: {'Content-Type': 'application/json'},
   body: JSON.stringify(newKittenDataObject),
-})
+}
   .then((response) => response.json())
   .then((data) => {
     if (data.success) {
@@ -139,12 +139,10 @@ function addNewKitten(event) {
     inputName.value = '';
     inputRace.value = '';
     } 
-    else {
-      .catch((error) => {
-        console.error(error)
-      });
-    }
   })
+  .catch((error) => {
+    console.error(error);
+  });
   }
 };
 
